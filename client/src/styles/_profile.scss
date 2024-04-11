@@ -1,0 +1,15 @@
+.proCont {
+  text-align: center;
+  padding: 20px 0;
+  .picProfile {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  .conOfDeleteandLogout {
+    padding: 20px;
+    color: red;
+    display: flex;
+    justify-content: space-between;
+  }
+}
