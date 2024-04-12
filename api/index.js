@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import userRoute from "../api/routes/user-routes.js";
 
 dotenv.config();
 
@@ -21,3 +22,5 @@ mongoose
   .catch((err) => console.log(err));
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
+app.use("/api/users", userRoute);
