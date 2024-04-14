@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import axios from "axios";
 
@@ -7,6 +7,7 @@ const Singup = () => {
   const [valueSignup, setValueSignup] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // creating an object to post it in mongo DB
   const handelsignvalue = (e) => {
@@ -34,22 +35,11 @@ const Singup = () => {
         setError(true);
         return;
       }
+      navigate("/signin");
     } catch (error) {
       setLoading(false);
       setError(true);
     }
-    /////////////////////////////////////////////////
-    //   try {
-    //     setLoading(true);
-    //     await axios.post("http://localhost:5000/api/user/signup", valueSignup);
-    //     setLoading(false);
-    //     setError(false);
-    //     alert("User created successful");
-    //   } catch (error) {
-    //     setLoading(false);
-    //     setError(false);
-    //     alert("Somthing went wrong or maybe Username or Email unavilabel");
-    //   }
   };
 
   return (

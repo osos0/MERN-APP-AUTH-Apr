@@ -33,7 +33,11 @@ export const Singin = async (req, res, next) => {
     const expireDate = new Date(Date.now() + 3600000); // Set expiration time 1 hour from now
 
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expireDate })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: expireDate,
+        secure: true,
+      })
       .status(200)
       .json(rest);
   } catch (error) {
