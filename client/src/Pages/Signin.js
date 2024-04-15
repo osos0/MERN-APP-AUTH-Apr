@@ -1,15 +1,25 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux-rtk/slices/user-slice";
+import { useSelector, useDispatch } from "react-redux";
+
 // import { Link } from "react-router-dom";
 // import axios from "axios";
 
 const Singin = () => {
   const [valueSignup, setValueSignup] = useState({});
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
+  const { error, loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   // creating an object to post it in mongo DB
   const handelsignvalue = (e) => {
@@ -21,8 +31,9 @@ const Singin = () => {
 
     /////////////////////////////////////////////////
     try {
-      setLoading(true);
-      setError(false);
+      // setLoading(true);
+      // setError(false);
+      dispatch(signInStart());
       const res = await fetch("http://localhost:5000/api/auth/signin", {
         method: "POST",
         headers: {
@@ -32,15 +43,20 @@ const Singin = () => {
       });
       const data = await res.json();
 
-      setLoading(false);
+      // setLoading(false);
+
       if (data.success === false) {
-        setError(true);
+        // setError(true);
+        dispatch(signInFailure(data));
         return;
       }
+      dispatch(signInSuccess(data));
+
       navigate("/");
     } catch (error) {
-      setLoading(false);
-      setError(true);
+      // setLoading(false);
+      // setError(true);
+      dispatch(signInFailure(error));
     }
   };
 
@@ -69,10 +85,12 @@ const Singin = () => {
         <div>Don't Have an account ?..</div>
         <Link to="/signup">. Sign Up</Link>
       </div>
-      {error && (
+      {error ? (
         <div className="alert alert-danger" role="alert">
-          {error && " Somethings Went Wrong"}
+          {error.message || " Somethings Went Wrong"}
         </div>
+      ) : (
+        ""
       )}
     </>
   );
