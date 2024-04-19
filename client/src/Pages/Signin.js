@@ -7,6 +7,7 @@ import {
   signInFailure,
 } from "../redux-rtk/slices/user-slice";
 import { useSelector, useDispatch } from "react-redux";
+import OAuth from "../components/OAuth";
 
 // import { Link } from "react-router-dom";
 // import axios from "axios";
@@ -77,9 +78,9 @@ const Singin = () => {
           onChange={handelsignvalue}
         />
         <button disabled={loading}>{loading ? "Loading..." : "Sign In"}</button>
-        <button type="button" className="btnOfGoogle">
-          CONTINUE WITH GOOGLE
-        </button>
+        {/* <button type="button" className="btnOfGoogle"> */}
+        <OAuth />
+        {/* </button> */}
       </form>
       <div className="d-flex p-4 ">
         <div>Don't Have an account ?..</div>
