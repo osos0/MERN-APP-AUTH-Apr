@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 // import { ToggleTheme } from "../rtk/Theme/themeSlice";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faChromecast } from "@fortawesome/free-brands-svg-icons";
 const Header = () => {
-  // const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   // const dispatch = useDispatch();
 
@@ -56,10 +56,18 @@ const Header = () => {
               {/* <FontAwesomeIcon icon={faChromecast} /> */}
             </div>
 
-            <Link to={"/signin"}>
-              <button type="button" className="btn btn-success">
-                Sign in
-              </button>
+            <Link to={"/profile"}>
+              {currentUser ? (
+                <img
+                  src={currentUser.profilePic}
+                  className="rounded-circle"
+                  width="30"
+                  height="30"
+                  alt={currentUser.username}
+                />
+              ) : (
+                "Sign In"
+              )}
             </Link>
           </div>
         </div>
