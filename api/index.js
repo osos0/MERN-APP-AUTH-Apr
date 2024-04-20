@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRoute from "../api/routes/user-routes.js";
 import authRoute from "../api/routes/auth-router.js";
-import { error } from "console";
+// import { error } from "console";
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
@@ -13,7 +14,7 @@ app.use(express.json());
 
 app.use(cors());
 
-// app.use(cookieParser());
+app.use(cookieParser());
 
 const PORT = 5000;
 
