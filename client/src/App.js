@@ -8,6 +8,7 @@ import Signin from "./Pages/Signin";
 import Signup from "./Pages/Signup";
 import Profile from "./Pages/Profile";
 import Header from "./components/Header";
+import About from "./Pages/About";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
+        <Route path="/about" element={<About />} />
       </Routes>
     </div>
   );
