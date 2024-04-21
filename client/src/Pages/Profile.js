@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState, useEffect } from "react";
 import {
   getDownloadURL,
@@ -8,18 +8,27 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "../redux-rtk/slices/user-slice";
+
 const Profile = () => {
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (image) {
       handleFileUpload(image);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image]);
 
   const handleFileUpload = async (image) => {
@@ -44,13 +53,44 @@ const Profile = () => {
       }
     );
   };
+  const handelChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+
+      const res = await fetch(
+        `http://localhost:5000/api/users/update/${currentUser._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      console.log(formData);
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(updateUserFailure(data));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+    } catch (error) {
+      dispatch(updateUserFailure(error));
+    }
+  };
 
   return (
     <>
       <div className="container proCont">
         <h1>Profile</h1>
         <h2>Hello {currentUser.username}</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="file"
             hidden
@@ -88,22 +128,35 @@ const Profile = () => {
 
           <input
             type="text"
-            placeholder="Username"
-            id="Username"
+            placeholder="username"
+            id="username"
             defaultValue={currentUser.username}
+            onChange={handelChange}
           />
           <input
             type="email"
-            placeholder="Email"
+            placeholder="email"
             id="email"
             defaultValue={currentUser.email}
+            onChange={handelChange}
           />
-          <input type="password" placeholder="Password" id="password" />
-          <button type="button">Update</button>
+          <input
+            type="password"
+            placeholder="password"
+            id="password"
+            onChange={handelChange}
+          />
+          <button>{loading ? "loading ... " : "Update"}</button>
         </form>
         <div className="conOfDeleteandLogout">
           <span>Delete Account</span>
           <span>Log Out</span>
+        </div>
+        <div className="text-danger mt-5">
+          {error && "Something went wrong!"}
+        </div>
+        <div className="text-success mt-5">
+          {updateSuccess && "User is updated successfully!"}
         </div>
       </div>
     </>

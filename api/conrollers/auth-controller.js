@@ -36,7 +36,6 @@ export const Singin = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true,
         expires: expireDate,
-        secure: true,
       })
       .status(200)
       .json(rest);
@@ -94,16 +93,3 @@ export const google = async (req, res, next) => {
     next(error);
   }
 };
-
-// const user = await User.findOne({ email: req.body.email });
-// if (user) {
-//   const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-//   const { password: hashedPassword, ...rest } = validUser._doc;
-//   const expireDate = new Date(Date.now() + 3600000); // Set expiration time 1 hour from now
-//   res
-//     .cookie("access_token", token, {
-//       httpOnly: true,
-//       expires: expireDate,
-//     })
-//     .status(200)
-//     .json(rest);
