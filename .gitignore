@@ -6,7 +6,7 @@
 /.pnp
 .pnp.js
 db-Auth.txt
-
+deployment.txt
 # testing
 /coverage
 
