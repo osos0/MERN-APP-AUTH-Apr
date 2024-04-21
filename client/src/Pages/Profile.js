@@ -15,6 +15,7 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutSuccess,
 } from "../redux-rtk/slices/user-slice";
 
 const Profile = () => {
@@ -108,6 +109,15 @@ const Profile = () => {
     }
   };
 
+  const handleLogOut = async () => {
+    try {
+      await fetch(`http://localhost:5000/api/auth/signout`);
+      dispatch(signOutSuccess());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="container proCont">
@@ -173,7 +183,7 @@ const Profile = () => {
         </form>
         <div className="conOfDeleteandLogout">
           <span onClick={handleDeleteAccount}>Delete Account</span>
-          <span>Log Out</span>
+          <span onClick={handleLogOut}>Log Out</span>
         </div>
         <div className="text-danger mt-5">
           {error && "Something went wrong!"}
