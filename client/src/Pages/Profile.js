@@ -12,6 +12,9 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../redux-rtk/slices/user-slice";
 
 const Profile = () => {
@@ -85,6 +88,26 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(
+        `http://localhost:5000/api/users/delete/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+
   return (
     <>
       <div className="container proCont">
@@ -149,7 +172,7 @@ const Profile = () => {
           <button>{loading ? "loading ... " : "Update"}</button>
         </form>
         <div className="conOfDeleteandLogout">
-          <span>Delete Account</span>
+          <span onClick={handleDeleteAccount}>Delete Account</span>
           <span>Log Out</span>
         </div>
         <div className="text-danger mt-5">
